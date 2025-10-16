@@ -1,10 +1,11 @@
+import os
+import io
 import torch
 import torch.nn as nn
 from torchvision import models, transforms
 from PIL import Image, ImageEnhance
 from rembg import remove
 from flask import Flask, render_template, request, jsonify
-import io, os
 
 # --------------------------- Flask setup
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -26,13 +27,12 @@ model.to(device)
 model.eval()
 
 # --------------------------- Image preprocessing
-def preprocess_image(image_bytes, brightness_factor=1.2, contrast_factor=1.2, remove_bg=True):
+def preprocess_image(image_bytes, brightness_factor=1.2, contrast_factor=1.2, remove_bg_flag=True):
     img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    if remove_bg:
+    if remove_bg_flag:
         img = remove(img)
         if img.mode != "RGB":
             img = img.convert("RGB")
-
     enhancer = ImageEnhance.Brightness(img)
     img = enhancer.enhance(brightness_factor)
     enhancer = ImageEnhance.Contrast(img)
@@ -77,10 +77,12 @@ def predict():
         "confidence": confidence
     })
 
-# --------------------------- Run server
+# --------------------------- Run server (Render-ready)
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 5000))  # USE Render’s dynamic port
+    print(f"Starting Flask server on port {port}...")
     app.run(host='0.0.0.0', port=port)
+
 
 
 
