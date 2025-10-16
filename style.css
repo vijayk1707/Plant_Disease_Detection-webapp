@@ -1,0 +1,218 @@
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #f9fbe7 0%, #e8f5e9 100%);
+  /* Leafy border at the edge of the screen */
+  border: 64px solid transparent;
+  border-image-source: url("img.jpg");
+  border-image-slice: 110;
+  border-image-repeat: round;
+}
+
+.container, body .container {
+  padding: 24px;
+  border-radius: 20px;
+  background: #fffde7 !important; /* pale yellow */
+  width: 90vw;
+  max-width: 1100px;
+  max-height: calc(100vh - 48px);
+  box-sizing: border-box;
+  overflow: auto;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* 🌱 Base Styles (PC / Laptop) */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #56ab2f, #a8e063);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Main card */
+.container {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  max-width: 900px;
+  width: 100%;
+  margin: 20px;
+}
+
+/* Heading */
+h1 {
+  margin-bottom: 20px;
+  color: #2e7d32;
+  text-align: center;
+  font-size: 2rem;
+}
+
+/* Upload Section */
+.upload-section {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+input[type="file"] {
+  margin: 10px 0;
+}
+
+button {
+  padding: 10px 20px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #4caf50;
+}
+
+/* Result Section (two-column layout) */
+.result-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.preview, .prediction {
+  flex: 1;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.preview img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+/* ------------------------------------------------------ */
+/* 📱 RESPONSIVE STYLES */
+/* ------------------------------------------------------ */
+
+/* Tablets & medium devices (<= 768px) */
+@media (max-width: 768px) {
+  .result-section {
+    flex-direction: column;   /* stack vertically */
+  }
+
+  .preview, .prediction {
+    width: 100%;
+  }
+
+  .container {
+    padding: 25px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  button {
+    width: 100%;              /* full-width button */
+  }
+}
+
+/* Small phones (<= 480px) */
+@media (max-width: 480px) {
+  body {
+    align-items: flex-start;  /* top align content */
+  }
+
+  .container {
+    margin: 10px;
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  button {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+}
+
+
+/* Main card */
+.container {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  max-width: 900px;
+  width: 90%;
+  text-align: center;
+  z-index: 1;   /* keep content above background */
+}
+
+
+
+/* Heading */
+h1 {
+  margin-bottom: 20px;
+  color: #2e7d32;
+}
+
+/* Upload Section */
+.upload-section {
+  margin-bottom: 20px;
+}
+
+input[type="file"] {
+  margin: 10px 0;
+}
+
+button {
+  padding: 10px 20px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #4caf50;
+}
+
+/* Result Section (two-column layout) */
+.result-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+/* Preview Box */
+.preview, .prediction {
+  flex: 1;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.preview img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+}
