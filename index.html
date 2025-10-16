@@ -1,39 +1,49 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+<html>
+<head>
     <title>Plant Disease Detection</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="module" src="script.js" defer></script>
-  </head>
-  <body>
-    <div class="container">
-      <!-- Project Title -->
-      <h1>Plant Disease Detection</h1>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Plant Disease Detection</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="file" id="file-input" required>
+        <button type="submit">Predict</button>
+    </form>
+    <div id="preview"></div>
+    <div id="result"></div>
 
-      <!-- Upload Section -->
-      <div class="upload-section">
-        <p>Upload Image of Leaf</p>
-        <input type="file" id="fileInput" accept="image/*">
-        <button>Predict</button>
-      </div>
+    <script>
+        const form = document.getElementById('upload-form');
+        const fileInput = document.getElementById('file-input');
+        const preview = document.getElementById('preview');
+        const result = document.getElementById('result');
 
-      <!-- Result Area -->
-      <div class="result-section">
-        <!-- Preview -->
-        <div class="preview">
-          <h2>Preview</h2>
-          <img id="previewImage" src="" alt="Leaf preview">
-        </div>
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.width = 300;
+                preview.innerHTML = '';
+                preview.appendChild(img);
+            }
+        });
 
-        <!-- Prediction + Remedies -->
-        <div class="prediction">
-          <h2>Prediction</h2>
-          <p id="prediction">No prediction yet</p>
-        </div>
-      </div>
-    </div>
-  </body>
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            result.innerHTML = 'Predicting...';
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            result.innerHTML = `Class: ${data.predicted_class} <br> Confidence: ${data.confidence}%`;
+        });
+    </script>
+</body>
 </html>
 
