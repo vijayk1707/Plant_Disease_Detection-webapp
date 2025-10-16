@@ -4,24 +4,20 @@ from torchvision import models, transforms
 from PIL import Image, ImageEnhance
 from rembg import remove
 from flask import Flask, render_template, request, jsonify
-import io
+import io, os
 
-# ---------------------------
-# Flask setup
+# --------------------------- Flask setup
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
-# ---------------------------
-# Paths
+# --------------------------- Paths
 MODEL_PATH = "mobilenetv2_best.pth"
 CLASS_NAMES_FILE = "class_names.txt"
 
-# ---------------------------
-# Load class names
+# --------------------------- Load class names
 with open(CLASS_NAMES_FILE, "r") as f:
     class_names = [line.strip() for line in f.readlines()]
 
-# ---------------------------
-# Load model
+# --------------------------- Load model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = models.mobilenet_v2(weights=None)
 model.classifier[1] = nn.Linear(model.last_channel, len(class_names))
@@ -29,17 +25,14 @@ model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
 model.to(device)
 model.eval()
 
-# ---------------------------
-# Image preprocessing
+# --------------------------- Image preprocessing
 def preprocess_image(image_bytes, brightness_factor=1.2, contrast_factor=1.2, remove_bg=True):
     img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-
     if remove_bg:
         img = remove(img)
         if img.mode != "RGB":
             img = img.convert("RGB")
 
-    # Enhance brightness and contrast
     enhancer = ImageEnhance.Brightness(img)
     img = enhancer.enhance(brightness_factor)
     enhancer = ImageEnhance.Contrast(img)
@@ -54,8 +47,7 @@ def preprocess_image(image_bytes, brightness_factor=1.2, contrast_factor=1.2, re
     ])
     return transform(img).unsqueeze(0).to(device)
 
-# ---------------------------
-# Routes
+# --------------------------- Routes
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -85,6 +77,9 @@ def predict():
         "confidence": confidence
     })
 
-# ---------------------------
+# --------------------------- Run server
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get("PORT", 5000))  # Use Render’s dynamic port
+    app.run(host='0.0.0.0', port=port)
+
+
